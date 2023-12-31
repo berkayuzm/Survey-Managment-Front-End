@@ -42,3 +42,20 @@ code {
 #tablo{
   display: table-row !important;
 }
+.my-navbar{
+  backdrop-filter: blur(7px) saturate(180%);
+  -webkit-backdrop-filter: blur(7px) saturate(180%);
+  background-color: rgba(17, 25, 40, .6);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+@media only screen and (max-width: 767px) {
+  .form-container{
+    width: 70% !important;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .form-container{
+    width: 50% !important;
+  }
+}

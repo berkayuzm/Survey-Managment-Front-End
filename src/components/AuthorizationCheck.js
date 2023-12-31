@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getToken } from '../services/api-service';
-import { decodeToken } from '../services/token-service';
+import { decodeToken,getToken } from '../services/token-service';
 
 const AuthorizationCheck = ({ requiredRoles, children }) => {
   const [userRoles, setUserRoles] = useState([]);

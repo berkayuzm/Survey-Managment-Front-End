@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
@@ -6,7 +5,6 @@ import Home from "./components/Home";
 import { RequireAuth } from "react-auth-kit";
 import AuthorizationCheck from "./components/AuthorizationCheck";
 import Admin from "./components/Admin/Admin";
-import SurveyForm from "./components/Admin/AddSurveyForm";
 import AddSurveyForm from "./components/Admin/AddSurveyForm";
 import UpdateSurveyForm from "./components/Admin/UpdateSurveyForm";
 import CompletedSurveys from "./components/CompletedSurveys";

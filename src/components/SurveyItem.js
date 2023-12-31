@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
-import { Card, Container, Icon, Grid, Image, Button } from "semantic-ui-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Card, Icon, Grid, Image, Button } from "semantic-ui-react";
+import { useNavigate } from "react-router-dom";
 
 function SurveyItem({ survey }) {
   const navigate = useNavigate();
   const { survey_id,title, description, created_at } = survey;
-  useEffect(() => {
-    console.log(title);
-  });
+
   const formatDate = (inputDate) => {
     const date = new Date(inputDate);
     const formattedDate = date.toLocaleDateString("tr-TR", {
@@ -22,7 +20,7 @@ function SurveyItem({ survey }) {
     navigate(`/completesurvey/${survey_id}`)
   }
   return (
-    <Grid.Column>
+    <Grid.Column mobile={16} tablet={8} computer={4} >
       <Card className="survey-card">
         <Card.Content header={title} />
         <Card.Content description={description} />

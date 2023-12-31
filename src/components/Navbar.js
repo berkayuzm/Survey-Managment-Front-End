@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Dropdown, Menu } from "semantic-ui-react";
 import { Route, useNavigate, Routes, Outlet } from "react-router-dom";
 import { useSignOut } from "react-auth-kit";
-import { getToken } from "../services/api-service";
-import { decodeToken } from "../services/token-service";
+import { decodeToken, getToken } from "../services/token-service";
 function Navbar() {
   const [userRole, setUserRole] = useState(null);
-  const [userId,setUserId]=useState(0)
-
+  const [userId, setUserId] = useState(0);
   const currentPath = window.location.pathname;
+  const [activeItem, setActiveItem] = useState("home");
+  const signOut = useSignOut();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = getToken();
     if (token) {
@@ -18,17 +20,18 @@ function Navbar() {
         setUserRole(role);
       }
     }
+    if (currentPath === "/home") {
+      setActiveItem("Anasayfa");
+    } else if (currentPath === "/completed") {
+      setActiveItem("Tamamladığım Anketler");
+    }
   }, []);
 
-  const signOut = useSignOut();
-  const navigate = useNavigate();
-  const [activeItem, setActiveItem] = useState("home");
   const handleItemClick = (e, { name }) => {
-    if(name==="Anasayfa"){
-      navigate("/home")
-    }
-    else if(name==="completedsurveys"){
-      navigate("/completed")
+    if (name === "Anasayfa") {
+      navigate("/home");
+    } else if (name === "Tamamladığım Anketler") {
+      navigate("/completed");
     }
     setActiveItem(name);
   };
@@ -39,41 +42,42 @@ function Navbar() {
   const goToAdmin = () => {
     navigate("/admin");
   };
+
   return (
-    <Menu size="large">
+    <Menu size="large" className="my-navbar">
       <Container>
         <Menu.Item
           name="Anasayfa"
           active={activeItem === "Anasayfa"}
-          
           onClick={handleItemClick}
         />
         {currentPath === "/admin" ? null : (
           <Menu.Item
-            name="completedsurveys"
-            active={activeItem === "completedsurveys"}
-
+            name="Tamamladığım Anketler"
+            active={activeItem === "Tamamladığım Anketler"}
             onClick={handleItemClick}
           />
         )}
         <Menu.Item position="right">
-
-          {
-            currentPath==="/admin"?(null):(
-              <>
+          {currentPath === "/admin" ? null : (
+            <>
               {userRole === "admin" ? (
-                  <Button style={{ marginRight: 2 + "rem" }}  positive primary onClick={goToAdmin}>
-                    Admin
-                  </Button>
+                <Button
+                  style={{ marginRight: 2 + "rem" }}
+                  positive
+                  primary
+                  onClick={goToAdmin}
+                >
+                  Admin
+                </Button>
               ) : null}
-              </>
-            )
-          }
-         
-            <Button negative onClick={signOutFunc}>
-              Log Out
-            </Button>
-          </Menu.Item>
+            </>
+          )}
+
+          <Button negative onClick={signOutFunc}>
+            Log Out
+          </Button>
+        </Menu.Item>
       </Container>
     </Menu>
   );

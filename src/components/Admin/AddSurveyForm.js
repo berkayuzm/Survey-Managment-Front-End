@@ -4,7 +4,6 @@ import { Button, Checkbox, Container, Form } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import {  toast } from 'react-toastify';
 const AddSurveyForm = () => {
-  // State'ler
   const navigate=useNavigate();
   const [questions, setQuestions] = useState([{ text: "", choices: [""] }]);
   const [surveyTitle, setSurveyTitle] = useState("");
@@ -73,24 +72,37 @@ const AddSurveyForm = () => {
             console.log(addChoiceResponse);
           }
         }
-        
+        navigate("/admin")
+        toast.success('Anket başarıyla oluşturuldu.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
 
     } catch (error) {
-      console.error("İstek hatası:", error);
-    }
-    finally{
+      const errors=[];
+      error.response.data.errors.map((error)=>errors.push(error))
       navigate("/admin")
-      toast.success('Anket başarıyla oluşturuldu.', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        });
+      console.log(errors)
+      for (let index = 0; index < errors.length; index++) {
+        toast.error(<p>{errors[index].msg}</p>, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+      }
     }
+  
    
   };
 

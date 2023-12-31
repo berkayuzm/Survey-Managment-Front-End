@@ -1,24 +1,20 @@
 // ApiService.js
 
 import axios from 'axios';
+import { getToken } from './token-service';
 
 const BASE_URL = 'http://localhost:3000';
-export const getToken=()=>{
-    let result = document.cookie.split("; ").reduce((prev, current) => {
-        const [name, ...value] = current.split("=");
-        prev[name] = value.join("=");
-        return prev;
-      }, {});
-      let accessToken = result._auth;
-      return accessToken
-}
 
-const api = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    "x-access-token":getToken()
-  },
+
+const api = axios.create();
+api.interceptors.request.use(request => {
+  request.headers['x-access-token'] = getToken();
+  request.baseURL=BASE_URL;
+  request.headers['Content-Type']="application/json"
+  return request;
+}, error => {
+  // İstek gönderme hatası
+  return Promise.reject(error);
 });
 
 export const fetchData = async (endpoint, params = {}) => {

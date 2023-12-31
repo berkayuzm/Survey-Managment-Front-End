@@ -4,8 +4,7 @@ import { fetchData, postData } from "../services/api-service";
 import { Button, Container, Form } from "semantic-ui-react";
 import LoadingComponent from "./LoadingComponent";
 import { toast } from "react-toastify";
-import { getToken } from "../services/api-service";
-import { decodeToken } from "../services/token-service";
+import { decodeToken,getToken, getUserId } from "../services/token-service";
 function CompleteSurvey() {
   const [loadingButton, setLoadingButton] = useState(false);
   const navigate = useNavigate();
@@ -19,18 +18,10 @@ function CompleteSurvey() {
   useEffect(() => {
     getSurvey();
     const token = getToken();
-    if (token) {
-      const decodedToken = decodeToken(token);
-      if (decodeToken) {
-        
-        setUserId(decodedToken.user_id)
-      }
-    }
+    const user_id=getUserId(token);
+    setUserId(user_id)
   }, []);
-  useEffect(()=>{
-    console.log(userId);
 
-  },[userId])
   const submitForm= async()=>{
     setLoadingButton(true);
       try {
@@ -39,7 +30,7 @@ function CompleteSurvey() {
         }
         await postData("/api/completedsurveys",{user_id:userId,survey_id:survey_id})
 
-        navigate("/home")
+        navigate("/completed")
         toast.success('Anket tamamlandı.', {
             position: "top-right",
             autoClose: 5000,
@@ -91,6 +82,7 @@ function CompleteSurvey() {
       setLoading(false);
     }
   };
+
   const handleRadioChange = (question_id) => (event) => {
     setSelectedValue(event.target.value);
     const newAnswer={user_id:userId,survey_id:survey_id,question_id:question_id,answer_text:event.target.value}
@@ -113,13 +105,11 @@ function CompleteSurvey() {
         <LoadingComponent />
       ) : (
         <Form>
-         
           {questions.map((question, questionIndex) => (
             <Form.Field key={questionIndex}>
               <label>
                 {questionIndex + 1}.Soru: {question.text}
               </label>
-
               {question.choices.map((choice, choiceIndex) => (
                 <Form.Field key={choiceIndex}>
                   <Form.Field
